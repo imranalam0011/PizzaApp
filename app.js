@@ -6,10 +6,10 @@ const path = require("path");
 const expressLayout = require("express-ejs-layouts");
 const PORT = process.env.PORT || 3000;
 const mongoose = require("mongoose");
-// const { connect } = require("http2");
 const session = require("express-session");
 const flash = require("express-flash");
 const MongoDbStore = require("connect-mongo")(session);
+const passport = require("passport");
 
 //Database connection
 const url = "mongodb://localhost/pizzaApp";
@@ -20,13 +20,13 @@ mongoose.connect(url, {
   useFindAndModify: true,
 });
 const connection = mongoose.connection;
-connection
-  .once("open", () => {
+connection.once("open", () => {
     console.log("Database connected");
   })
   .catch((err) => {
     console.log(err);
   });
+
 
 //Session store
 let mongoStore = new MongoDbStore({
@@ -46,15 +46,25 @@ app.use(
   })
 );
 
+// Passport Config
+const passportInit = require('./app/confiig/passport')
+passportInit(passport)
+app.use(passport.initialize())
+app.use(passport.session())
+
+
+
 app.use(flash());
 
 //Assets
 app.use(express.static("public"));
+app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 // Global middleware
 app.use((req, res, next) => {
   res.locals.session = req.session;
+  res.locals.user = req.user;
   next();
 });
 
@@ -69,4 +79,4 @@ app.listen(PORT, () => {
   console.log(`Listening at ${PORT}`);
 });
 
-//lec done till 1:26
+//lec done till 37
