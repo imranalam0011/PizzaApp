@@ -4,7 +4,7 @@ const app = express();
 const ejs = require("ejs");
 const path = require("path");
 const expressLayout = require("express-ejs-layouts");
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3300;
 const mongoose = require("mongoose");
 const session = require("express-session");
 const flash = require("express-flash");
@@ -20,13 +20,13 @@ mongoose.connect(url, {
   useFindAndModify: true,
 });
 const connection = mongoose.connection;
-connection.once("open", () => {
+connection
+  .once("open", () => {
     console.log("Database connected");
   })
   .catch((err) => {
     console.log(err);
   });
-
 
 //Session store
 let mongoStore = new MongoDbStore({
@@ -47,12 +47,10 @@ app.use(
 );
 
 // Passport Config
-const passportInit = require('./app/confiig/passport')
-passportInit(passport)
-app.use(passport.initialize())
-app.use(passport.session())
-
-
+const passportInit = require("./app/confiig/passport");
+passportInit(passport);
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use(flash());
 
@@ -79,4 +77,5 @@ app.listen(PORT, () => {
   console.log(`Listening at ${PORT}`);
 });
 
-//lec done till 37
+//lec done till 1:32 min
+//have to un esm
