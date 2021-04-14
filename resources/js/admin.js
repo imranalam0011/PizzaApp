@@ -9,7 +9,7 @@ export function initAdmin() {
 
   axios
     .get("/admin/orders", {
-      Headers: {
+      headers: {
         "X-Requested-With": "XMLHttpRequest",
       },
     })
@@ -26,7 +26,7 @@ export function initAdmin() {
     let parsedItems = Object.values(items);
     return parsedItems.map((menuItem) => {
         return `
-                <p>${menuItem.items.name} size: ${menuItem.item.size} - ${menuItem.qty} pcs </p>
+                <p>${menuItem.item.name} size: ${menuItem.item.size} - ${menuItem.qty} pcs </p>
             `;
       })
       .join("");
